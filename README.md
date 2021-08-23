@@ -35,7 +35,7 @@ Here's a basic implementation.
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-```''
+```
 Here's to give list data to slidingchipsview
 
 ```kotlin
