@@ -15,6 +15,7 @@ class SlidingChipsView<T> : HorizontalScrollView {
 
     private lateinit var chipGroup: ChipGroup
     private var textColor = R.color.chip_text_color
+    private var strokeColor = 0
     private var chipBackgroundColor = R.color.chip_background_color
     private var textPadding = 0f
     private var textStyle = 0
@@ -47,6 +48,13 @@ class SlidingChipsView<T> : HorizontalScrollView {
                     context,
                             chipBackgroundColor
                 )
+                if (strokeColor != 0) {
+                    chip.chipStrokeColor = ContextCompat.getColorStateList(
+                        context,
+                        strokeColor
+                    )
+                    chip.chipStrokeWidth = context.resources.getDimensionPixelSize(R.dimen.chip_dimen_1dp).toFloat()
+                }
                 chip.setOnClickListener {
                     repeat (chipGroup.childCount) {idx ->
                         chipGroup[idx].isSelected = false
@@ -54,7 +62,7 @@ class SlidingChipsView<T> : HorizontalScrollView {
                     chip.isSelected = true
 
                     val left = it.left - scrollX
-                    val space = resources.getDimensionPixelSize(R.dimen.dimen_16dp)
+                    val space = resources.getDimensionPixelSize(R.dimen.chip_dimen_16dp)
 
                     // if partial show on right
                     if (it.width + left + space > width) {
@@ -115,19 +123,22 @@ class SlidingChipsView<T> : HorizontalScrollView {
                 0, 0
             )
 
-            val startEndSpace = a.getDimension(R.styleable.SlidingChipsView_startEndSpace,
-                resources.getDimensionPixelSize(R.dimen.dimen_16dp).toFloat())
+            val startEndSpace = a.getDimension(R.styleable.SlidingChipsView_slideChipMargin,
+                resources.getDimensionPixelSize(R.dimen.chip_dimen_16dp).toFloat())
 
-            textColor = a.getResourceId(R.styleable.SlidingChipsView_textColor,
+            textColor = a.getResourceId(R.styleable.SlidingChipsView_slideChipTextColor,
                 R.color.chip_text_color)
 
-            textPadding = a.getDimension(R.styleable.SlidingChipsView_textPadding,
-                resources.getDimensionPixelSize(R.dimen.dimen_20dp).toFloat())
+            strokeColor = a.getResourceId(R.styleable.SlidingChipsView_slideChipStrokeColor,
+                0)
 
-            chipBackgroundColor = a.getResourceId(R.styleable.SlidingChipsView_chipBackground,
+            textPadding = a.getDimension(R.styleable.SlidingChipsView_slideChipTextPadding,
+                resources.getDimensionPixelSize(R.dimen.chip_dimen_20dp).toFloat())
+
+            chipBackgroundColor = a.getResourceId(R.styleable.SlidingChipsView_slideChipBackground,
                 R.color.chip_background_color)
 
-            textStyle = a.getResourceId(R.styleable.SlidingChipsView_textStyle, 0)
+            textStyle = a.getResourceId(R.styleable.SlidingChipsView_slideChipTextStyle, 0)
 
             chipGroup = ChipGroup(context)
             addView(chipGroup)

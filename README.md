@@ -46,13 +46,13 @@ Here's to give list data to slidingchipsview
 
 ### Attributes information
 
-##### _app:startEndSpace_
+##### _app:slideChipMargin_
 [dimension]: margin start end end with parent, default 16dp
 
-##### _app:textPadding_
+##### _app:slideChipTextPadding_
 [dimension]: start and text text padding text and chip, default 20dp
 
-##### _app:textColor_
+##### _app:slideChipTextColor_
 [integer]: resource id color of chip text, default
 
 ```xml
@@ -66,7 +66,7 @@ Here's to give list data to slidingchipsview
 </selector>
 ```
 
-##### _app:chipBackground_
+##### _app:slideChipBackground_
 [integer]: resource id color of chip background, default
 
 ```xml

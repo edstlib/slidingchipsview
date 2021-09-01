@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="dimen_16dp">16dp</dimen>
-    <dimen name="dimen_20dp">20dp</dimen>
+    <dimen name="chip_dimen_1dp">1dp</dimen>
+    <dimen name="chip_dimen_16dp">16dp</dimen>
+    <dimen name="chip_dimen_20dp">20dp</dimen>
 </resources>

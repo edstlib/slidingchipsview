@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="SlidingChipsView">
-        <attr name="startEndSpace" format="dimension" />
-        <attr name="textColor" format="integer" />
-        <attr name="textPadding" format="dimension" />
-        <attr name="chipBackground" format="integer" />
-        <attr name="textStyle" format="reference" />
+        <attr name="slideChipMargin" format="dimension" />
+        <attr name="slideChipTextColor" format="reference" />
+        <attr name="slideChipTextPadding" format="dimension" />
+        <attr name="slideChipBackground" format="reference" />
+        <attr name="slideChipTextStyle" format="reference" />
+        <attr name="slideChipStrokeColor" format="reference" />
     </declare-styleable>
 </resources>
