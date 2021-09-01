@@ -24,6 +24,7 @@ class SlidingChipsView<T> : HorizontalScrollView {
         set(value) {
             field = value
 
+            chipGroup.removeAllViews()
             for ((i, item) in items.withIndex()) {
 
                 val chip = Chip(context)
