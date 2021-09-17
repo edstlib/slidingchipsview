@@ -3,6 +3,7 @@ package id.co.edtslib.slidingchipsview.example
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import id.co.edtslib.slidingchipsview.GroupChipsView
 import id.co.edtslib.slidingchipsview.SlidingChipsDelegate
 import id.co.edtslib.slidingchipsview.SlidingChipsView
 
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
         val list = mutableListOf("Abah", "Hezbi", "Ade", "Robert", "Jovan", "Ucup")
 
-        val chips = findViewById<SlidingChipsView<String>>(R.id.chips)
+        val chips = findViewById<GroupChipsView<String>>(R.id.chips)
         chips.delegate = object : SlidingChipsDelegate<String> {
             override fun onSelected(item: String, position: Int) {
                 Toast.makeText(this@MainActivity, item, Toast.LENGTH_SHORT).show()
