@@ -2,15 +2,18 @@
 
 ![PagerNavigationView](https://i.ibb.co/LzrRFnF/slidingchipsview.png)
 
+# GroupChipsView
+![PagerNavigationView](https://i.ibb.co/v1PRWbJ/Screen-Shot-2021-09-17-at-17-17-47.png)
+
 ## Setup
 ### Gradle
 
 Add this to your project level `build.gradle`:
 ```groovy
 allprojects {
- repositories {
-    maven { url "https://jitpack.io" }
- }
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
 }
 ```
 Add this to your app `build.gradle`:
@@ -28,20 +31,20 @@ Here's a basic implementation.
 
 ```xml
     <id.co.edtslib.slidingchipsview.SlidingChipsView
-        android:id="@+id/chips"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:id="@+id/chips"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 ```
 Here's to give list data to slidingchipsview
 
 ```kotlin
         val list = mutableListOf("Abah", "Hezbi", "Ade", "Robert", "Jovan", "Ucup")
-        val chips = findViewById<SlidingChipsView<String>>(R.id.chips)
-        chips.items = list
+val chips = findViewById<SlidingChipsView<String>>(R.id.chips)
+chips.items = list
 ```
 
 ### Attributes information
@@ -86,12 +89,12 @@ You can set a listener to be notified when the user click the SlidingChipsView. 
 
 ```kotlin
         val chips = findViewById<SlidingChipsView<String>>(R.id.chips)
-        chips.delegate = object : SlidingChipsDelegate<String> {
-            override fun onSelected(item: String, position: Int) {
-                Toast.makeText(this@MainActivity, item, Toast.LENGTH_SHORT).show()
-            }
+chips.delegate = object : SlidingChipsDelegate<String> {
+    override fun onSelected(item: String, position: Int) {
+        Toast.makeText(this@MainActivity, item, Toast.LENGTH_SHORT).show()
+    }
 
-        }
+}
 ```
 
 ### Method for navigation actions on the SlidingVhipsView
@@ -99,7 +102,7 @@ You can set a listener to be notified when the user click the SlidingChipsView. 
 
 ```kotlin
     // selected index of chip
-    var selectedIndex: Int = 0
+var selectedIndex: Int = 0
 ```
 
 
