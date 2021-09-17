@@ -2,6 +2,9 @@
 
 ![PagerNavigationView](https://i.ibb.co/LzrRFnF/slidingchipsview.png)
 
+# GroupChipsView
+![PagerNavigationView](https://i.ibb.co/v1PRWbJ/Screen-Shot-2021-09-17-at-17-17-47.png)
+
 ## Setup
 ### Gradle
 
