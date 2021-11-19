@@ -1,102 +1,82 @@
 package id.co.edtslib.slidingchipsview
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Rect
 import android.util.AttributeSet
-import android.view.ViewGroup
-import android.widget.HorizontalScrollView
-import androidx.core.content.ContextCompat
-import androidx.core.view.get
-import androidx.core.widget.TextViewCompat
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import id.co.edtslib.baserecyclerview.BaseRecyclerViewAdapterDelegate
+import id.co.edtslib.baserecyclerview.BaseViewHolder
 
-class SlidingChipsView<T> : HorizontalScrollView {
+class SlidingChipsView<T> : RecyclerView {
+    class ItemDecoration(private val margin: Int): RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: State
+        ) {
+            super.getItemOffsets(outRect, view, parent, state)
+
+            val position = parent.getChildAdapterPosition(view)
+            outRect.left = if (position == 0) 0 else margin
+        }
+    }
+
+    private var _adapter: ChipAdapter<RecyclerData<T>>? = null
+
     var delegate: SlidingChipsDelegate<T>? = null
 
-    private lateinit var chipGroup: ChipGroup
-    private var textColor = R.color.chip_text_color
-    private var strokeColor = 0
-    private var chipBackgroundColor = R.color.chip_background_color
-    private var textPadding = 0f
-    private var textStyle = 0
-
-    var items: MutableList<T> = mutableListOf()
-        set(value) {
-            field = value
-
-            chipGroup.removeAllViews()
-            for ((i, item) in items.withIndex()) {
-
-                val chip = Chip(context)
-                chip.text = item.toString()
-
-                if (textStyle > 0) {
-                    TextViewCompat.setTextAppearance(chip, textStyle)
-                }
-
-
-                chip.tag = item
-                chip.setTextColor(
-                    ContextCompat.getColorStateList(
-                        context,
-                        textColor
-                    )
-                )
-                chip.chipStartPadding = textPadding
-                chip.chipEndPadding = textPadding
-
-                chip.chipBackgroundColor = ContextCompat.getColorStateList(
-                    context,
-                            chipBackgroundColor
-                )
-                if (strokeColor != 0) {
-                    chip.chipStrokeColor = ContextCompat.getColorStateList(
-                        context,
-                        strokeColor
-                    )
-                    chip.chipStrokeWidth = context.resources.getDimensionPixelSize(R.dimen.chip_dimen_1dp).toFloat()
-                }
-                chip.setOnClickListener {
-                    repeat (chipGroup.childCount) {idx ->
-                        chipGroup[idx].isSelected = false
-                    }
-                    chip.isSelected = true
-
-                    val left = it.left - scrollX
-                    val space = resources.getDimensionPixelSize(R.dimen.chip_dimen_16dp)
-
-                    // if partial show on right
-                    if (it.width + left + space > width) {
-                        val diff = width - it.width - left - space
-                        val scrollX = scrollX - diff
-                        scrollTo(scrollX, 0)
-                    }
-
-                    delegate?.onSelected(item, i)
-                }
-
-                chip.isSelected = selectionIndex == i
-
-                chipGroup.addView(chip)
-            }
-        }
-
+    private var prevSelectedIndex = -1
     var selectionIndex = 0
         set(value) {
             field = value
 
-            repeat(chipGroup.childCount) {
-                chipGroup.getChildAt(it).isSelected = it == value
+            if (prevSelectedIndex >= 0) {
+                val item = _adapter?.list?.get(prevSelectedIndex)
+                item?.selected = false
+
+                _adapter?.notifyItemChanged(prevSelectedIndex)
+            }
+
+            val item = _adapter?.list?.get(value)
+            item?.selected = true
+
+            _adapter?.notifyItemChanged(value)
+            prevSelectedIndex = value
+
+            delegate?.onSelected(item?.data!!, value)
+
+            val linearLayoutManager = layoutManager as LinearLayoutManager
+            val last = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+            if (value > last) {
+                linearLayoutManager.scrollToPosition(value)
             }
         }
 
-    constructor(context: Context?) : super(context) {
+    var items: MutableList<T> = mutableListOf()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+
+            val list = mutableListOf<RecyclerData<T>>()
+            for (item in items) {
+                list.add(RecyclerData(item, false))
+            }
+
+            _adapter?.list = list
+            _adapter?.notifyDataSetChanged()
+        }
+
+    constructor(context: Context) : super(context) {
         init(null)
     }
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         init(attrs)
     }
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
         defStyleAttr
@@ -104,18 +84,15 @@ class SlidingChipsView<T> : HorizontalScrollView {
         init(attrs)
     }
 
-    constructor(
-        context: Context?,
-        attrs: AttributeSet?,
-        defStyleAttr: Int,
-        defStyleRes: Int
-    ) : super(context, attrs, defStyleAttr, defStyleRes) {
-        init(attrs)
-    }
-
     private fun init(attrs: AttributeSet?) {
         isVerticalScrollBarEnabled = false
         isHorizontalScrollBarEnabled = false
+
+        var textColor =  R.color.chip_text_color
+        var textPadding = resources.getDimensionPixelSize(R.dimen.chip_dimen_20dp).toFloat()
+        var chipBackgroundColor = R.color.chip_background_color
+        var strokeColor = 0
+        var textStyle = 0
 
         if (attrs != null) {
             val a = context.theme.obtainStyledAttributes(
@@ -126,6 +103,8 @@ class SlidingChipsView<T> : HorizontalScrollView {
 
             val startEndSpace = a.getDimension(R.styleable.SlidingChipsView_slideChipMargin,
                 resources.getDimensionPixelSize(R.dimen.chip_dimen_16dp).toFloat())
+
+            setPadding(startEndSpace.toInt(), 0, startEndSpace.toInt(), 0)
 
             textColor = a.getResourceId(R.styleable.SlidingChipsView_slideChipTextColor,
                 R.color.chip_text_color)
@@ -141,20 +120,26 @@ class SlidingChipsView<T> : HorizontalScrollView {
 
             textStyle = a.getResourceId(R.styleable.SlidingChipsView_slideChipTextStyle, 0)
 
-            chipGroup = ChipGroup(context)
-            addView(chipGroup)
-
-            chipGroup.isSingleLine = true
-            chipGroup.isSingleSelection = true
-            chipGroup.setPadding(startEndSpace.toInt(), 0, startEndSpace.toInt(), 0)
-
-            val layoutParams = chipGroup.layoutParams
-            layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
-            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-
-            chipGroup.layoutParams = layoutParams
 
             a.recycle()
         }
+
+        clipToPadding = false
+        layoutManager = LinearLayoutManager(context, HORIZONTAL, false)
+
+        addItemDecoration(ItemDecoration(context.resources.getDimensionPixelSize(R.dimen.chip_dimen_8dp)))
+
+        _adapter = ChipAdapter<RecyclerData<T>>(textColor, textPadding, chipBackgroundColor, strokeColor,
+            textStyle)
+        _adapter?.delegate = object : BaseRecyclerViewAdapterDelegate<RecyclerData<T>> {
+            override fun onClick(t: RecyclerData<T>, position: Int, holder: BaseViewHolder<RecyclerData<T>>?) {
+                selectionIndex = position
+            }
+
+            override fun onDraw(t: RecyclerData<T>, position: Int) {
+            }
+        }
+
+        adapter = _adapter
     }
 }

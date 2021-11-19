@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context=".MainActivity">
 
-    <id.co.edtslib.slidingchipsview.GroupChipsView
+    <id.co.edtslib.slidingchipsview.SlidingChipsView
         android:orientation="vertical"
         android:id="@+id/chips"
         android:layout_width="wrap_content"
