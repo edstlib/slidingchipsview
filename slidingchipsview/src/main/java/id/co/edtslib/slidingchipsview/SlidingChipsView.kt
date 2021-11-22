@@ -51,7 +51,8 @@ class SlidingChipsView<T> : RecyclerView {
 
             val linearLayoutManager = layoutManager as LinearLayoutManager
             val last = linearLayoutManager.findLastCompletelyVisibleItemPosition()
-            if (value > last) {
+            val first = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+            if (value > last || value < first) {
                 linearLayoutManager.scrollToPosition(value)
             }
         }
