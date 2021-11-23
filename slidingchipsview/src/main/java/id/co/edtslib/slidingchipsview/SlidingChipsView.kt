@@ -27,6 +27,7 @@ class SlidingChipsView<T> : RecyclerView {
 
     private var _adapter: ChipAdapter<RecyclerData<T>>? = null
 
+    var firstSelected = false
     var delegate: SlidingChipsDelegate<T>? = null
 
     private var prevSelectedIndex = -1
@@ -63,8 +64,10 @@ class SlidingChipsView<T> : RecyclerView {
             field = value
 
             val list = mutableListOf<RecyclerData<T>>()
+            var i = 0
             for (item in items) {
-                list.add(RecyclerData(item, false))
+                list.add(RecyclerData(item, firstSelected && i == 0))
+                i++
             }
 
             _adapter?.list = list

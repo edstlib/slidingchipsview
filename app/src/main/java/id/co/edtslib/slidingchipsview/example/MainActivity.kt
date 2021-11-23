@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         val list = mutableListOf("Abah", "Hezbi", "Ade", "Robert", "Jovan", "Ucup")
 
         val chips = findViewById<SlidingChipsView<String>>(R.id.chips)
+        chips.firstSelected = true
         chips.delegate = object : SlidingChipsDelegate<String> {
             override fun onSelected(item: String, position: Int) {
                 Toast.makeText(this@MainActivity, item, Toast.LENGTH_SHORT).show()
