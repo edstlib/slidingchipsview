@@ -28,6 +28,12 @@ class SlidingChipsView<T> : RecyclerView {
     private var _adapter: ChipAdapter<RecyclerData<T>>? = null
 
     var firstSelected = false
+        set(value) {
+            field = value
+            if (value) {
+                prevSelectedIndex = 0
+            }
+        }
     var delegate: SlidingChipsDelegate<T>? = null
 
     private var prevSelectedIndex = -1
