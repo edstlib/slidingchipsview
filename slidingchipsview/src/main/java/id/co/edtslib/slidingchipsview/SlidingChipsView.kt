@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import id.co.edtslib.baserecyclerview.BaseRecyclerViewAdapterDelegate
 import id.co.edtslib.baserecyclerview.BaseViewHolder
 
-class SlidingChipsView<T> : RecyclerView {
+open class SlidingChipsView<T> : RecyclerView {
     class ItemDecoration(private val margin: Int): RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,
