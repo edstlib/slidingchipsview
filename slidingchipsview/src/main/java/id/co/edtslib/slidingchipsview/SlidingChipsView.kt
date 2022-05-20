@@ -18,6 +18,7 @@ class SlidingChipsView<T> : HorizontalScrollView {
     private var chipBackgroundColor = R.color.chip_background_color
     private var textPadding = 0f
     private var textStyle = 0
+    var autoScroll = false
 
     var items: MutableList<T> = mutableListOf()
         set(value) {
@@ -53,14 +54,16 @@ class SlidingChipsView<T> : HorizontalScrollView {
                     }
                     chip.isSelected = true
 
-                    val left = it.left - scrollX
-                    val space = resources.getDimensionPixelSize(R.dimen.dimen_16dp)
+                    if (autoScroll) {
+                        val left = it.left - scrollX
+                        val space = resources.getDimensionPixelSize(R.dimen.dimen_16dp)
 
-                    // if partial show on right
-                    if (it.width + left + space > width) {
-                        val diff = width - it.width - left - space
-                        val scrollX = scrollX - diff
-                        scrollTo(scrollX, 0)
+                        // if partial show on right
+                        if (it.width + left + space > width) {
+                            val diff = width - it.width - left - space
+                            val scrollX = scrollX - diff
+                            scrollTo(scrollX, 0)
+                        }
                     }
 
                     delegate?.onSelected(item, i)
