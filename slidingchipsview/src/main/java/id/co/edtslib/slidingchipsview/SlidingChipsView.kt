@@ -11,6 +11,8 @@ import id.co.edtslib.baserecyclerview.BaseRecyclerViewAdapterDelegate
 import id.co.edtslib.baserecyclerview.BaseViewHolder
 
 open class SlidingChipsView<T> : RecyclerView {
+    var autoScroll = true
+
     class ItemDecoration(private val margin: Int): RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,
@@ -56,11 +58,13 @@ open class SlidingChipsView<T> : RecyclerView {
 
             delegate?.onSelected(item?.data!!, value)
 
-            val linearLayoutManager = layoutManager as LinearLayoutManager
-            val last = linearLayoutManager.findLastCompletelyVisibleItemPosition()
-            val first = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
-            if (value > last || value < first) {
-                linearLayoutManager.scrollToPosition(value)
+            if (autoScroll) {
+                val linearLayoutManager = layoutManager as LinearLayoutManager
+                val last = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+                val first = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+                if (value > last || value < first) {
+                    linearLayoutManager.scrollToPosition(value)
+                }
             }
         }
 
