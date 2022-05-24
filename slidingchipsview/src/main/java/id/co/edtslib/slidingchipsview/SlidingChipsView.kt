@@ -44,10 +44,13 @@ open class SlidingChipsView<T> : RecyclerView {
             field = value
 
             if (prevSelectedIndex >= 0) {
-                val item = _adapter?.list?.get(prevSelectedIndex)
-                item?.selected = false
+                if (_adapter?.list != null && prevSelectedIndex < _adapter!!.list.size) {
 
-                _adapter?.notifyItemChanged(prevSelectedIndex)
+                    val item = _adapter?.list?.get(prevSelectedIndex)
+                    item?.selected = false
+
+                    _adapter?.notifyItemChanged(prevSelectedIndex)
+                }
             }
 
             val item = _adapter?.list?.get(value)
