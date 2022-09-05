@@ -97,12 +97,28 @@ chips.delegate = object : SlidingChipsDelegate<String> {
 }
 ```
 
-### Method for navigation actions on the SlidingVhipsView
+### Method for navigation actions on the SlidingChipsView
 
 
 ```kotlin
     // selected index of chip
 var selectedIndex: Int = 0
+```
+
+```kotlin
+    // selected index of chip
+var selectedItem: T? = null
+
+// and define your equal function, for example
+
+override fun equals(other: Any?): Boolean {
+    if (other is Name) {
+        return short == other.short
+    }
+
+    return false
+}
+
 ```
 
 
