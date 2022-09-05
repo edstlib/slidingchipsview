@@ -39,6 +39,22 @@ open class SlidingChipsView<T> : RecyclerView {
     var delegate: SlidingChipsDelegate<T>? = null
 
     private var prevSelectedIndex = -1
+
+    var selectedItem: T? = null
+        set(value) {
+            field = value
+            var i = 0
+            for (item in items) {
+                if (item?.equals(value) == true) {
+                    break
+                }
+
+                i++
+            }
+
+            selectionIndex = i
+        }
+
     var selectionIndex = 0
         set(value) {
             field = value
@@ -77,10 +93,8 @@ open class SlidingChipsView<T> : RecyclerView {
             field = value
 
             val list = mutableListOf<RecyclerData<T>>()
-            var i = 0
-            for (item in items) {
+            for ((i, item) in items.withIndex()) {
                 list.add(RecyclerData(item, firstSelected && i == 0))
-                i++
             }
 
             _adapter?.list = list
@@ -146,7 +160,7 @@ open class SlidingChipsView<T> : RecyclerView {
 
         addItemDecoration(ItemDecoration(context.resources.getDimensionPixelSize(R.dimen.chip_dimen_8dp)))
 
-        _adapter = ChipAdapter<RecyclerData<T>>(textColor, textPadding, chipBackgroundColor, strokeColor,
+        _adapter = ChipAdapter(textColor, textPadding, chipBackgroundColor, strokeColor,
             textStyle)
         _adapter?.delegate = object : BaseRecyclerViewAdapterDelegate<RecyclerData<T>> {
             override fun onClick(t: RecyclerData<T>, position: Int, holder: BaseViewHolder<RecyclerData<T>>?) {

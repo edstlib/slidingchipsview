@@ -12,17 +12,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val list = mutableListOf("Abah", "Hezbi", "Ade", "Robert", "Jovan", "Ucup")
+        val list = mutableListOf(Name("Abah"),
+            Name("Hezbi"),
+            Name("Ade"),
+            Name("Robert"),
+            Name("Jovan"),
+            Name("Ucup"))
 
-        val chips = findViewById<SlidingChipsView<String>>(R.id.chips)
+        val chips = findViewById<SlidingChipsView<Name>>(R.id.chips)
         chips.firstSelected = true
-        chips.delegate = object : SlidingChipsDelegate<String> {
-            override fun onSelected(item: String, position: Int) {
-                Toast.makeText(this@MainActivity, item, Toast.LENGTH_SHORT).show()
+        chips.delegate = object : SlidingChipsDelegate<Name> {
+            override fun onSelected(item: Name, position: Int) {
+                Toast.makeText(this@MainActivity, item.toString(), Toast.LENGTH_SHORT).show()
             }
 
         }
         chips.items = list
+        chips.selectedItem = Name("Ade")
 
     }
 }
