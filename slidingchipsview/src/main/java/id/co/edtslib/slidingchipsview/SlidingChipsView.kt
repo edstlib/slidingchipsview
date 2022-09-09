@@ -69,20 +69,23 @@ open class SlidingChipsView<T> : RecyclerView {
                 }
             }
 
-            val item = _adapter?.list?.get(value)
-            item?.selected = true
+            val size = if (_adapter?.list == null) 0 else _adapter!!.list.size
+            if (size > 0 && value < size) {
+                val item = _adapter?.list?.get(value)
+                item?.selected = true
 
-            _adapter?.notifyItemChanged(value)
-            prevSelectedIndex = value
+                _adapter?.notifyItemChanged(value)
+                prevSelectedIndex = value
 
-            delegate?.onSelected(item?.data!!, value)
+                delegate?.onSelected(item?.data!!, value)
 
-            if (autoScroll) {
-                val linearLayoutManager = layoutManager as LinearLayoutManager
-                val last = linearLayoutManager.findLastCompletelyVisibleItemPosition()
-                val first = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
-                if (value > last || value < first) {
-                    linearLayoutManager.scrollToPosition(value)
+                if (autoScroll) {
+                    val linearLayoutManager = layoutManager as LinearLayoutManager
+                    val last = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+                    val first = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+                    if (value > last || value < first) {
+                        linearLayoutManager.scrollToPosition(value)
+                    }
                 }
             }
         }
